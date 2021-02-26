@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import loginMoudel, { UserModelState } from './login';
+import loginModule, { UserModelState } from './login';
 
 Vue.use(Vuex);
 export interface RootState {
@@ -8,6 +8,6 @@ export interface RootState {
 }
 export default new Vuex.Store({
     modules: {
-        login: loginMoudel,
+        login: loginModule,
     },
 });

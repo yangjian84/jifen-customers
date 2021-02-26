@@ -1,8 +1,8 @@
 <template>
     <div class="login">
-        <AntdForm :form="form" class="login-form" @submit="handleSubmit">
-            <AntdFormItem>
-                <AntdInput
+        <a-form :form="form" class="login-form" @submit="handleSubmit">
+            <a-form-item>
+                <a-input
                     v-decorator="[
                         'username',
                         {
@@ -16,11 +16,11 @@
                     ]"
                     placeholder="Username"
                 >
-                    <AntdIcon slot="prefix" type="user" style="color: rgba(0, 0, 0, 0.25)" />
-                </AntdInput>
-            </AntdFormItem>
-            <AntdFormItem>
-                <AntdInput
+                    <a-icon slot="prefix" type="user" style="color: rgba(0, 0, 0, 0.25)" />
+                </a-input>
+            </a-form-item>
+            <a-form-item>
+                <a-input
                     v-decorator="[
                         'password',
                         {
@@ -35,40 +35,30 @@
                     type="password"
                     placeholder="Password"
                 >
-                    <AntdIcon slot="prefix" type="lock" style="color: rgba(0, 0, 0, 0.25)" />
-                </AntdInput>
-            </AntdFormItem>
-            <AntdFormItem>
-                <AntdButton block type="primary" html-type="submit" class="login-form-AntdButton">
+                    <a-icon slot="prefix" type="lock" style="color: rgba(0, 0, 0, 0.25)" />
+                </a-input>
+            </a-form-item>
+            <a-form-item>
+                <a-button block type="primary" html-type="submit" class="login-form-AntdButton">
                     Log in
-                </AntdButton>
-            </AntdFormItem>
-        </AntdForm>
+                </a-button>
+            </a-form-item>
+        </a-form>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Form, Button, Icon, Input, notification } from 'ant-design-vue';
 import { WrappedFormUtils } from 'ant-design-vue/types/form/form';
 import { UserLoginPrams } from '@/types/login';
 import CryptoJS from 'crypto-js';
+import { notification } from 'ant-design-vue';
 
 @Component({
-    components: {
-        AntdForm: Form,
-        AntdFormItem: Form.Item,
-        AntdButton: Button,
-        AntdIcon: Icon,
-        AntdInput: Input,
-    },
+    components: {},
 })
 export default class LoginPage extends Vue {
     private form!: WrappedFormUtils;
-
-    $refs!: {
-        loginFormRef: HTMLElement;
-    };
 
     created() {
         this.initFomr();

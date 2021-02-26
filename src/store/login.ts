@@ -14,13 +14,15 @@ export interface UserInfo {
 export interface UserModelState {
     userInfo: UserInfo;
     loginStatus: boolean;
+
 }
 
-const loginMoudel: Module<UserModelState, RootState> = {
+const loginModule: Module<UserModelState, RootState> = {
     namespaced: true,
     state: {
         userInfo: {} as UserInfo,
         loginStatus: false,
+ 
     },
     mutations: {
         CHANGE_USER_INFO(state, { payload: { userInfo } }) {
@@ -53,7 +55,7 @@ const loginMoudel: Module<UserModelState, RootState> = {
                     entity?.login &&
                         commit({
                             type: 'CHANGE_LOGIN_STATUS',
-                            payload: { login: false, ...entity },
+                            payload: { login: true, ...entity },
                         });
                     return { message };
                 }
@@ -61,19 +63,6 @@ const loginMoudel: Module<UserModelState, RootState> = {
             });
         },
     },
-    getters: {
-        userInfo(state) {
-            localStorage.setItem(
-                'userInfo',
-                JSON.stringify(state.userInfo)
-            );
-            const userInfo = JSON.parse(
-                localStorage.userInfo || '{}'
-            ) as UserInfo;
-            return (state.userInfo as UserInfo).name
-                ? state.userInfo
-                : userInfo;
-        }
-    }
+
 };
-export default loginMoudel;
+export default loginModule;
