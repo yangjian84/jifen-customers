@@ -1,11 +1,11 @@
 import httpRequest from '@/utils/request';
-import { UserLoginPrams } from '@/types/login';
+import { UserLoginPrams, ChangePassParams } from '@/types/login';
 
 class UserFetchServe {
     /**
      * 请求登录
      * @param params
-    */
+     */
     public fetchUserLogin(params: UserLoginPrams) {
         let loginSign!: string;
         for (let i = 0; i < 16; i++) {
@@ -22,6 +22,12 @@ class UserFetchServe {
     */
     public fetchUserInfo() {
         return httpRequest({ url: '/user/userInfo' });
+    }
+    /**
+     * 修改密码
+     */
+    public fetchChangePassword(params: ChangePassParams) {
+        return httpRequest({ url: '/user/changePassword', data: params });
     }
 }
 export default new UserFetchServe();

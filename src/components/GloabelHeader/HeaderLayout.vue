@@ -5,16 +5,20 @@
                 <div>
                     <a-space direction="horizontal">
                         <a-avatar :size="36" icon="user" />
-                        <span>号称科技</span>
+                        <span>{{ userInfo.name }}</span>
                     </a-space>
                 </div>
                 <a-menu slot="overlay">
                     <a-menu-item>
                         <a @click="showModal">修改密码 </a>
-                        <ChangePassWord :visible="visible_" @hdclick="hideModal_"></ChangePassWord>
+                        <ChangePassWord
+                            :visible="visible_"
+                            @okclick="okModal"
+                            @cancelclick="cancelModal"
+                        ></ChangePassWord>
                     </a-menu-item>
                     <a-menu-item>
-                        <a>退出登录</a>
+                        <a @click="logOut">退出登录</a>
                     </a-menu-item>
                 </a-menu>
             </a-dropdown>
@@ -24,17 +28,64 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import ChangePassWord from '@/components/GloabelHeader/ChangePass.vue';
+import { ChangePassParams } from '@/types/login';
+import { notification } from 'ant-design-vue';
 
 @Component({
     components: { ChangePassWord },
 })
 export default class BasicPage extends Vue {
     private visible_ = false;
+    /**
+     * 获取用户信息
+     */
+    private get userInfo() {
+        return this.$store.getters['login/getUserInfo']();
+    }
+    /**
+     * 第二种写法
+     */
+    // private get userInfo() {
+    //     return this.$store.state.login.userInfo;
+    // }
+
+    /**
+     * 显示表单
+     */
     showModal() {
         this.visible_ = true;
     }
-    hideModal_() {
+    /**
+     * 确认
+     */
+    okModal(values: ChangePassParams) {
+        // this.visible_ = false;
+        if (this.visible_) {
+            const secret = new Date().toJSON().split(':')[0];
+            values.password &&
+                (values.password = CryptoJS.AES.encrypt(values.password, secret).toString());
+            values.oldPassword &&
+                (values.oldPassword = CryptoJS.AES.encrypt(values.oldPassword, secret).toString());
+            this.$store
+                .dispatch({ type: 'login/fetchChangePassword', params: values })
+                .then((res) => {
+                    notification.success({ message: res.message, description: '' });
+                });
+        }
+    }
+    /**
+     * 取消
+     */
+    cancelModal() {
         this.visible_ = false;
+    }
+    /**
+     * 退出登录
+     */
+    logOut() {
+        this.$store.commit({ type: 'login/CHANGE_LOGIN_STATUS', payload: { login: false } });
+        localStorage.clear();
+        this.$router.push('/');
     }
 }
 </script>

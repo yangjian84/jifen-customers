@@ -1,9 +1,16 @@
 <template>
-    <a-modal v-model="visible" title="修改密码" ok-text="确认" cancel-text="取消" @ok="hideModal_">
+    <a-modal
+        :visible="visible"
+        title="修改密码"
+        ok-text="确认"
+        cancel-text="取消"
+        @ok="$emit('okclick')"
+        @cancel="$emit('cancelclick')"
+    >
         <a-form :form="form">
             <a-form-item>
                 <a-input
-                    disabled="true"
+                    :disabled="true"
                     placeholder="customer"
                     v-decorator="[
                         'username',
@@ -67,18 +74,25 @@ import { WrappedFormUtils } from 'ant-design-vue/types/form/form';
     components: {},
 })
 export default class ChangePage extends Vue {
-    @Prop() private visible !: boolean;
+    @Prop() private visible!: boolean;
     private form!: WrappedFormUtils;
+
     created() {
         this.initFomr();
     }
-
+    /**
+     * 验证表单
+     */
     initFomr() {
-        this.form = this.$form.createForm(this, { name: 'register' });
+        this.form = this.$form.createForm(this, { name: 'changpassword' });
     }
-    @Emit('hdclick') hideModal_() {
-        this.visible = !this.visible;
-    }
+    /**
+     * 确认提交修改密码
+     */
+    // @Emit('okclick') okModal() {
+        
+    // }
+    // @Emit('cancelclick') cancelModal() {}
 }
 </script>
 <style lang="scss" scoped></style>

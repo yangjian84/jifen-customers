@@ -3,6 +3,9 @@ import userFetchServe from '@/service/login-service';
 import { UserLoginPrams } from '@/types/login';
 import { RootState } from '.';
 
+/**
+ * 用户信息
+ */
 export interface UserInfo {
     username: string;
     name: string;
@@ -12,27 +15,32 @@ export interface UserInfo {
 }
 
 export interface UserModelState {
-    userInfo: UserInfo;
-    loginStatus: boolean;
-
+    userInfo: UserInfo; //用户信息
+    loginStatus: boolean; //登录状态
 }
 
-const loginModule: Module<UserModelState, RootState> = {
+export const loginModule: Module<UserModelState, RootState> = {
     namespaced: true,
     state: {
         userInfo: {} as UserInfo,
         loginStatus: false,
- 
     },
     mutations: {
         CHANGE_USER_INFO(state, { payload: { userInfo } }) {
-            return { ...state, userInfo } as UserModelState;
+            state.userInfo = userInfo;
         },
+
+        /**
+         * 改变登录状态
+         */
         CHANGE_LOGIN_STATUS(state, { payload: { login } }) {
-            return { ...state, loginStatus: login } as UserModelState;
+            state.loginStatus = login;
         },
     },
     actions: {
+        /**
+         * 获取用户信息
+         */
         fetchUserInfo({ commit }, _) {
             return userFetchServe.fetchUserInfo().then((response) => {
                 if (response?.data?.entity) {
@@ -44,6 +52,9 @@ const loginModule: Module<UserModelState, RootState> = {
                 }
             });
         },
+        /**
+         * 获取登录信息
+         */
         fetchLogin({ commit }, { params }) {
             const data = params as UserLoginPrams;
             return userFetchServe.fetchUserLogin(data).then((response) => {
@@ -62,7 +73,29 @@ const loginModule: Module<UserModelState, RootState> = {
                 return { message: 'Error' };
             });
         },
+        /**
+         * 修改密码
+         */
+        fetchChangePassword(_, { params }) {
+            return userFetchServe.fetchChangePassword(params).then((response) => {
+                if (response) {
+                    return { message: response?.data?.message };
+                }
+                return { message: 'Error' };
+            });
+        },
     },
-
+    getters: {
+        /**
+         * 获取用户信息
+         */
+        // getUserInfo(state) {
+        //     return (id: number) => {
+        //         return state.userInfoList.find((item) => item.cuid === id);
+        //     };
+        // },
+        getUserInfo: (state) => () => {
+            return state.userInfo;
+        },
+    },
 };
-export default loginModule;

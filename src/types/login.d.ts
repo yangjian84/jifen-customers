@@ -7,4 +7,8 @@ export interface UserLoginPrams {
     password: string;
 }
 
-
+export interface ChangePassParams {
+    username: string;
+    password: string;
+    oldPassword: string;
+}

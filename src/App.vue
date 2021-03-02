@@ -8,13 +8,14 @@
 import { Vue, Component } from 'vue-property-decorator';
 @Component({})
 export default class AppPage extends Vue {
-    created() {
-        this.getUserInfo();
-    }
+    
 
     /**
      * 获取用户信息
      */
+    created() {
+        this.getUserInfo();
+    }
     getUserInfo() {
         const isLoginPath = location.pathname === '/';
         !isLoginPath && this.$store.dispatch({ type: 'login/fetchUserInfo' });

@@ -69,7 +69,7 @@ export default class LoginPage extends Vue {
     }
 
     /**
-     *
+     *提交表单
      */
     handleSubmit(e: Event) {
         e.preventDefault();
