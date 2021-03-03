@@ -10,11 +10,11 @@
                 </div>
                 <a-menu slot="overlay">
                     <a-menu-item>
-                        <a @click="showModal">修改密码 </a>
+                        <a @click="changClick">修改密码 </a>
                         <ChangePassWord
-                            :visible="visible_"
-                            @okclick="okModal"
-                            @cancelclick="cancelModal"
+                            :visible="visible_change"
+                            @okclick="changClick"
+                            @cancelclick="changClick"
                         ></ChangePassWord>
                     </a-menu-item>
                     <a-menu-item>
@@ -28,14 +28,14 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import ChangePassWord from '@/components/GloabelHeader/ChangePass.vue';
-import { ChangePassParams } from '@/types/login';
-import { notification } from 'ant-design-vue';
+// import { ChangePassParams } from '@/types/login';
+// import { notification } from 'ant-design-vue';
 
 @Component({
     components: { ChangePassWord },
 })
 export default class BasicPage extends Vue {
-    private visible_ = false;
+    private visible_change = false;
     /**
      * 获取用户信息
      */
@@ -50,34 +50,10 @@ export default class BasicPage extends Vue {
     // }
 
     /**
-     * 显示表单
+     * 修改密码弹窗
      */
-    showModal() {
-        this.visible_ = true;
-    }
-    /**
-     * 确认
-     */
-    okModal(values: ChangePassParams) {
-        // this.visible_ = false;
-        if (this.visible_) {
-            const secret = new Date().toJSON().split(':')[0];
-            values.password &&
-                (values.password = CryptoJS.AES.encrypt(values.password, secret).toString());
-            values.oldPassword &&
-                (values.oldPassword = CryptoJS.AES.encrypt(values.oldPassword, secret).toString());
-            this.$store
-                .dispatch({ type: 'login/fetchChangePassword', params: values })
-                .then((res) => {
-                    notification.success({ message: res.message, description: '' });
-                });
-        }
-    }
-    /**
-     * 取消
-     */
-    cancelModal() {
-        this.visible_ = false;
+    changClick() {
+        this.visible_change = !this.visible_change;
     }
     /**
      * 退出登录
@@ -87,6 +63,26 @@ export default class BasicPage extends Vue {
         localStorage.clear();
         this.$router.push('/');
     }
+    /**
+     * 确认
+     */
+    // okModal(values: ChangePassParams) {
+    //     this.visible_ = false;
+    //     if (this.visible_) {
+    //         const secret = new Date().toJSON().split(':')[0];
+    //         values.password &&
+    //             (values.password = CryptoJS.AES.encrypt(values.password, secret).toString());
+    //         values.oldPassword &&
+    //             (values.oldPassword = CryptoJS.AES.encrypt(values.oldPassword, secret).toString());
+    //         this.$store
+    //             .dispatch({ type: 'login/fetchChangePassword', params: values })
+    //             .then((res) => {
+    //                 notification.success({ message: res.message, description: '' });
+    //                 this.$router.push('/order')
+    //             });
+    //     }
+    // }
+    
 }
 </script>
 <style lang="scss" scoped>

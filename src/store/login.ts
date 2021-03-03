@@ -2,22 +2,7 @@ import { Module } from 'vuex';
 import userFetchServe from '@/service/login-service';
 import { UserLoginPrams } from '@/types/login';
 import { RootState } from '.';
-
-/**
- * 用户信息
- */
-export interface UserInfo {
-    username: string;
-    name: string;
-    authorized: 'admin' | 'user';
-    mobile: string;
-    cuid: number;
-}
-
-export interface UserModelState {
-    userInfo: UserInfo; //用户信息
-    loginStatus: boolean; //登录状态
-}
+import { UserModelState, UserInfo } from '@/types/login';
 
 export const loginModule: Module<UserModelState, RootState> = {
     namespaced: true,
@@ -26,6 +11,9 @@ export const loginModule: Module<UserModelState, RootState> = {
         loginStatus: false,
     },
     mutations: {
+        /**
+         * 改变用户信息
+         */
         CHANGE_USER_INFO(state, { payload: { userInfo } }) {
             state.userInfo = userInfo;
         },

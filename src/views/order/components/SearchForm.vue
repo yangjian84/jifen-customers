@@ -40,7 +40,7 @@
         <a-row>
             <a-col :span="24" class="buttonname">
                 <a-form-item>
-                    <a-button type="primary" htmlType="submit">
+                    <a-button type="primary" htmlType="submit" @click="search">
                         搜索
                     </a-button>
                 </a-form-item>
@@ -130,6 +130,12 @@ export default class SearchPage extends Vue {
     ];
     handleChange(value: string) {
         console.log(`selected ${value}`);
+    }
+    created(){
+        this.search()
+    }
+    search(){
+        this.$store.dispatch({type:'order/fetchSearch'})
     }
 }
 </script>

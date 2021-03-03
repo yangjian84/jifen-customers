@@ -15,7 +15,7 @@ import {
     Table,
     Tag,
     Divider,
-    
+    Drawer
 } from 'ant-design-vue';
 
 import Vue from 'vue';
@@ -36,3 +36,4 @@ Vue.use(Select);
 Vue.use(Table);
 Vue.use(Tag);
 Vue.use(Divider);
+Vue.use(Drawer)
