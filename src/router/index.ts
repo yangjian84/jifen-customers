@@ -1,36 +1,38 @@
 import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
+import VueRouter from 'vue-router';
 import Login from '../views/login/Login.vue';
 
 Vue.use(VueRouter);
 
-const routes: RouteConfig[] = [
-    {
-        path: '/',
-        name: 'Login',
-        component: Login,
-    },
-    {
-        path: '/order',
-        name: 'Order',
-        component: () => import(/* webpackChunkName: "about" */ '../views/order/Order.vue'),
-        meta: {
-            title: '登录',
-        },
-        // children: [
-        //     {
-        //         path: '/',
-        //         name: 'Login',
-        //         component: Login,
-        //     },
-        // ],
-    },
-    
-];
-
 const router = new VueRouter({
-    routes,
-    mode: 'history',
+    routes: [
+        {
+            path: '/login',
+            name: 'Login',
+            component: Login,
+        },
+        {
+            path: '/order',
+            name: 'Order',
+            component: () => import(/* webpackChunkName: "about" */ '../views/order/Order.vue'),
+            meta: {
+                title: '登录',
+            },
+            // children: [
+            //     {
+            //         path: '/',
+            //         name: 'Login',
+            //         component: Login,
+            //     },
+            // ],
+        },
+    ],
 });
+router.beforeEach((to,form,next)=>{
+    if(to.path ==='/login') return next();
+    const tokenStr = window.localStorage.getItem('TOKEN');
+    if(!tokenStr) return next('/login')
+    next()
 
+})
 export default router;

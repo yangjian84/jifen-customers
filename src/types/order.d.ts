@@ -6,8 +6,13 @@ export interface OrderModelState {
     orderResultList: Array<OrderResult>;
     expressInfo: Array<ExpressInfo>;
     callHisInfo: Array<CallHisInfo>;
+    loading: boolean;
 }
-
+export interface SearchPage {
+    current: number;
+    pageSize: number;
+    total: number;
+}
 export interface SearchFormData {
     orderNo?: string;
     expressMobile?: string;

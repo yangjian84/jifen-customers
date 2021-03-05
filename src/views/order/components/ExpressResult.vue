@@ -7,6 +7,7 @@
             @cancel="$emit('handleCancel')"
             ok-text="确认"
             cancel-text="取消"
+            :destroyOnClose="true"
         >
         </a-modal>
     </div>

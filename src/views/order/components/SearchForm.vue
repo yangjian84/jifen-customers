@@ -4,23 +4,25 @@
         :label-col="{ span: 5 }"
         :wrapper-col="{ span: 10 }"
         labelAlign="right"
+        @submit.prevent="handleSubmit"
+        :form="form"
     >
         <a-row :gutter="20">
             <a-col :span="12">
-                <a-form-item label="订单编号" name="orderNo">
-                    <a-input></a-input>
+                <a-form-item label="订单编号">
+                    <a-input v-decorator="['orderNo']"></a-input>
                 </a-form-item>
             </a-col>
             <a-col :span="12">
-                <a-form-item label="收货手机" name="expressMobile">
-                    <a-input></a-input>
+                <a-form-item label="收货手机">
+                    <a-input v-decorator="['expressMobile']"></a-input>
                 </a-form-item>
             </a-col>
         </a-row>
         <a-row :gutter="20">
             <a-col :span="12">
-                <a-form-item label="订单状态" name="orderStatus">
-                    <a-select style="width: 100% " @change="handleChange">
+                <a-form-item label="订单状态">
+                    <a-select v-decorator="['orderStatus']" style="width: 100% ">
                         <a-select-option v-for="item in orderStatus" :key="item.value">
                             {{ item.key }}
                         </a-select-option>
@@ -28,8 +30,8 @@
                 </a-form-item>
             </a-col>
             <a-col :span="12">
-                <a-form-item label="订单分类" name="orderClass">
-                    <a-select style="width: 100% " @change="handleChange">
+                <a-form-item label="订单分类">
+                    <a-select v-decorator="['orderClass']" style="width: 100% ">
                         <a-select-option v-for="item in orderClass" :key="item.value">
                             {{ item.name }}
                         </a-select-option>
@@ -40,7 +42,7 @@
         <a-row>
             <a-col :span="24" class="buttonname">
                 <a-form-item>
-                    <a-button type="primary" htmlType="submit" @click="search">
+                    <a-button  type="primary" html-type="submit">
                         搜索
                     </a-button>
                 </a-form-item>
@@ -56,10 +58,14 @@
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { WrappedFormUtils } from 'ant-design-vue/types/form/form';
+import { SearchFormData } from '@/types/order';
+
 @Component({
     components: {},
 })
 export default class SearchPage extends Vue {
+    private form!: WrappedFormUtils;
     private orderClass = [
         {
             value: 5,
@@ -128,14 +134,29 @@ export default class SearchPage extends Vue {
             key: '已完成',
         },
     ];
-    handleChange(value: string) {
-        console.log(`selected ${value}`);
+
+    created() {
+        this.initForm();
     }
-    created(){
-        this.search()
+    /**
+     * 表单验证
+     */
+    initForm() {
+        this.form = this.$form.createForm(this, { name: 'searchForm' });
     }
-    search(){
-        this.$store.dispatch({type:'order/fetchSearch'})
+    /**
+     * 提交搜索
+     */
+    handleSubmit() {
+        this.form.validateFields((err, values: SearchFormData) => {
+            if (!err) {
+                this.$store
+                    .dispatch({
+                        type: 'order/fetchSearch',
+                        params: { ...values },
+                    })
+            }
+        });
     }
 }
 </script>

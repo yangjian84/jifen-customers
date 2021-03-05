@@ -8,9 +8,6 @@
 import { Vue, Component } from 'vue-property-decorator';
 @Component({})
 export default class AppPage extends Vue {
-    /**
-     * 获取用户信息
-     */
     created() {
         this.getUserInfo();
     }
@@ -18,10 +15,12 @@ export default class AppPage extends Vue {
     private get routerUrl() {
         return this.$route.path;
     }
-
+    /**
+     * 获取用户信息
+     */
     getUserInfo() {
         this.$watch('routerUrl', (value: string, oldValue: string) => {
-            const isLoginPath = value === '/';
+            const isLoginPath = value === '/login';
             !isLoginPath && this.$store.dispatch({ type: 'login/fetchUserInfo' });
         });
     }
